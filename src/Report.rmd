@@ -1,10 +1,13 @@
 ---
-title: "Report"
+title: "NYC Flight Delay Report"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(nycflights13)
+
 ```
 
 ## R Markdown
