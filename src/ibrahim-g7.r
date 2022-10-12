@@ -111,13 +111,19 @@ flight %>%
   filter(dep_delay > 0) %>% 
   group_by(dest) %>% 
   summarise(count=n()) %>% 
-  arrange(-count) %>% 
-  View()
+  arrange(-count)
 
 #--------
 #Average delay in each carrier
 flight %>% 
-  group_by(carrier, dep_delay) %>% 
-  summarise(mean = mean(dep_delay)) %>% 
-  ggplot(aes(mean, carrier)) +
-  geom_point()
+  group_by(carrier) %>% 
+  summarise(avg = mean(dep_delay), std = sd(dep_delay)) %>% 
+  ggplot(aes(carrier, avg)) +
+  geom_col() +
+  #geom_errorbar(aes(ymin=avg-std, ymax=avg+std))+
+  scale_y_continuous("Average delay in min") +
+  scale_x_discrete("Carrier") +
+  ggtitle("Average delay in minute for each carrier thorughout 2013") +
+  theme_classic()
+#-------
+
