@@ -1,31 +1,109 @@
 ---
 title: "NYC Flight Delay Report"
-output: html_document
+output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
 library(nycflights13)
+library(tidyverse)
+library(janitor)
+flights <- nycflights13::flights %>%
+    remove_constant() %>%
+    drop_na(dep_time)
 
 ```
 
-## R Markdown
+## Introduction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+We will use the library nycflights13 which contains information about 16 different airline flying from 3 different airports in New York City.
+It contains 5 datasets that provide info about flights, airports, weather, planes, airlines.
+This data set was presented by the bureau of transportation and statistics.
+Through more research we’ve found out that there are actually more than 125 airlines but we couldn’t find out why they choose these 16.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Exploratory Data Analysis
 
-```{r cars}
-summary(cars)
+### Glimpsing the data
+
+We used the glimpse function to get a quick look at the data.
+
+glimpse(flights)
+
+We can see that the flights dataset has 328,521 rows and 19 columns.
+We removed the years column because it has the same value for all the rows, and we removed the rows that had missing values for the departure time.
+
+## Exploratory Data Analysis
+### Check which airport has the most flights
+```{r}
+flights %>%
+    count(origin) %>%
+    arrange(desc(n))
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+### Check which airport has the most delays
+```{r}
+flights %>%
+    filter(dep_delay > 0) %>%
+    count(origin) %>%
+    arrange(desc(n))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Exploratory Data Analysis
+### Check the proportion of delay to the number flights
+
+```{r}
+flights %>%
+    filter(dep_delay > 0) %>%
+    count(origin) %>%
+    mutate(prop = n / sum(n)) %>%
+    arrange(desc(prop))
+```
+
+## Key investigations results from the data
+### Which month has the most delays?
+
+```{r}
+flight %>%
+  filter(dep_delay > 0) %>%
+  group_by(month, origin) %>%
+  summarise(count=n()) %>%
+  ggplot(aes(month, count, color = origin))+
+  geom_point(shape = 4) +
+  geom_line() +
+  scale_x_continuous("Month", n.breaks = 12) +
+  scale_y_continuous("Count of delays") +
+  ggtitle("Delays count by month from all NYC airport.") +
+  theme_classic()
+```
+
+## Key investigations results from the data
+### What is the distribution of all delays?
+
+```{r}
+ggplot(flight, aes(x = dep_delay)) +
+  geom_histogram(bins = 80) +
+  scale_x_continuous(limits = c(-100, 500))
+```
+
+## Key investigations results from the data
+### What is the average delay for each airline?
+
+```{r}
+flight %>%
+  group_by(carrier) %>%
+  summarise(avg = mean(dep_delay), std = sd(dep_delay)) %>%
+  ggplot(aes(carrier, avg)) +
+  geom_col() +
+  #geom_errorbar(aes(ymin=avg-std, ymax=avg+std))+
+  scale_y_continuous("Average delay in min") +
+  scale_x_discrete("Carrier") +
+  ggtitle("Average delay in minute for each carrier thorughout 2013") +
+  theme_classic()
+```
+
+## Takeaways
+
+* Most flights and delays happen during the summer months
+* The proportion of delays increases with the number of flights
+* F9 has the highest average delay
+

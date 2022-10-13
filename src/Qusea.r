@@ -86,7 +86,10 @@ flights %>%
     filter(dep_delay > 0) %>%
     count(origin) %>%
     mutate(prop = n / sum(n)) %>%
-    arrange(desc(prop))
+    arrange(desc(prop)) %>%
+    ggplot(aes(y = prop)) +
+    geom_histogram() +
+    facet_grid(origin ~ .)
 
     "output
       origin     n  prop
