@@ -49,53 +49,14 @@ unique(flight$origin)
 #Delays count by month from all NYC airport.
 flight %>%
   filter(dep_delay > 0) %>%
-  group_by(month) %>%
+  group_by(month, origin) %>%
   summarise(count=n()) %>%
-  ggplot(aes(month, count))+
+  ggplot(aes(month, count, color = origin))+
   geom_point(shape = 4) +
   geom_line() +
   scale_x_continuous("Month", n.breaks = 12) +
   scale_y_continuous("Count of delays") +
   ggtitle("Delays count by month from all NYC airport.") +
-  theme_classic()
-
-#Delays count by month from EWR airport.
-flight %>%
-  filter(origin == "EWR" & dep_delay > 0) %>%
-  group_by(month) %>%
-  summarise(count=n()) %>%
-  ggplot(aes(month, count))+
-  geom_point(shape = 4) +
-  geom_line() +
-  scale_x_continuous("Month", n.breaks = 12) +
-  scale_y_continuous("Count of delays") +
-  ggtitle("Delays count by month from EWR airport.") +
-  theme_classic()
-
-#Delays count by month from LGA airport.
-flight %>%
-  filter(origin == "LGA" & dep_delay > 0) %>%
-  group_by(month) %>%
-  summarise(count=n()) %>%
-  ggplot(aes(month, count))+
-  geom_point(shape = 4) +
-  geom_line() +
-  scale_x_continuous("Month", n.breaks = 12) +
-  scale_y_continuous("Count of delays") +
-  ggtitle("Delays count by month from LGA airport.") +
-  theme_classic()
-
-#Delays count by month from JFK airport.
-flight %>%
-  filter(origin == "JFK" & dep_delay > 0) %>%
-  group_by(month) %>%
-  summarise(count=n()) %>%
-  ggplot(aes(month, count))+
-  geom_point(shape = 4) +
-  geom_line() +
-  scale_x_continuous("Month", n.breaks = 12) +
-  scale_y_continuous("Count of delays") +
-  ggtitle("Delays count by month from JFK airport.") +
   theme_classic()
 
 #-----------
