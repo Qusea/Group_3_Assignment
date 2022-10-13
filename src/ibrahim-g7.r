@@ -12,8 +12,8 @@ library(ggridges)
 flight <- nycflights13::flights
 
 #having a look at the data
-glimpse(flight_df) # 19 variables, and 328521 observation
-summary(flight_df)
+glimpse(flight) # 19 variables, and 328521 observation
+summary(flight)
 ?flights
 
 #number of distinct origin, destination, and carriers
@@ -64,6 +64,7 @@ flight %>%
 ggplot(flight, aes(x = dep_delay)) +
   geom_histogram(bins = 80) +
   scale_x_continuous(limits = c(-100, 500)) # There is 60 more delay that are higher than 500 min
+  
 
 #---------
 #Most delay to what destination
