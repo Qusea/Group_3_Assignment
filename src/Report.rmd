@@ -1,6 +1,6 @@
 ---
 title: "NYC Flight Delay Report"
-output: html_document
+output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
