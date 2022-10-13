@@ -4,45 +4,54 @@ output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(nycflights13)
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
 library(tidyverse)
+library(dplyr)
 library(janitor)
-flights <- nycflights13::flights %>%
+library(DataExplorer)
+library(nycflights13)
+library(scales)
+library(ggridges)
+library(reactable)
+flight <- nycflights13::flights %>%
     remove_constant() %>%
     drop_na(dep_time)
 
 ```
 
-## Introduction
+## Introduction and Sceniaro 
 
-We will use the library nycflights13 which contains information about 16 different airline flying from 3 different airports in New York City.
-It contains 5 datasets that provide info about flights, airports, weather, planes, airlines.
-This data set was presented by the bureau of transportation and statistics.
-Through more research we’ve found out that there are actually more than 125 airlines but we couldn’t find out why they choose these 16.
+* Dataset introduction.
+* Locations.
+* Tables.
+
+## Introduction and Scenarios
+In our presentation we will be looking at the delay in:
+
+* Different moths of the year
+* Different airports
+* The average delay for each carrier
+* And the overall distribution of delays
 
 ## Exploratory Data Analysis
-
-### Glimpsing the data
-
-We used the glimpse function to get a quick look at the data.
-
-glimpse(flights)
-
-We can see that the flights dataset has 328,521 rows and 19 columns.
-We removed the years column because it has the same value for all the rows, and we removed the rows that had missing values for the departure time.
+* The flights dataset has 328,521 rows and 19 columns.
+* Three origin airport.
+* 105 destination airports.
+* 16 carriers.
+* We removed the years column because it has the same value for all the rows, and we removed the rows that had missing values for the departure time.
+ 
 
 ## Exploratory Data Analysis
 ### Check which airport has the most flights
 ```{r}
-flights %>%
+flight %>%
     count(origin) %>%
     arrange(desc(n))
 ```
 
 ### Check which airport has the most delays
 ```{r}
-flights %>%
+flight %>%
     filter(dep_delay > 0) %>%
     count(origin) %>%
     arrange(desc(n))
@@ -52,7 +61,7 @@ flights %>%
 ### Check the proportion of delay to the number flights
 
 ```{r}
-flights %>%
+flight %>%
     filter(dep_delay > 0) %>%
     count(origin) %>%
     mutate(prop = n / sum(n)) %>%
@@ -103,7 +112,8 @@ flight %>%
 
 ## Takeaways
 
-* Most flights and delays happen during the summer months
-* The proportion of delays increases with the number of flights
-* F9 has the highest average delay
+* Most flights and delays happen during the summer months.
+* The proportion of delays increases with the number of flights.
+* F9 has the highest average delay.
+
 
