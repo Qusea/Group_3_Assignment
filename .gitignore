@@ -38,5 +38,9 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
+<<<<<<< HEAD
 # macOS files
+=======
+#DS_Store
+>>>>>>> d5e1e8f (modifying gitignore)
 .DS_Store
