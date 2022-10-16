@@ -5,6 +5,7 @@ library(janitor)
 flights <- nycflights13::flights %>%
     # removes the year variable because all rows have the same value
     remove_constant()
+    
 
 glimpse(flights)
 
